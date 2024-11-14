@@ -1,7 +1,32 @@
 #!/bin/bash
 
-# Get the directory path where install.sh is located, then append "/cmake-build-debug"
-BIN_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/cmake-build-debug"
+# Output directory for the binary
+BUILD_DIR="cmake-build-debug"
+
+# Full path to the binary
+BIN_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$BUILD_DIR"
+
+# Check if cmake is installed
+if command -v cmake &> /dev/null; then
+    echo "CMake found, compiling with CMake..."
+
+    # Create the build directory if needed
+    mkdir -p "$BUILD_DIR"
+    cd "$BUILD_DIR"
+
+    # Run CMake to generate the project files and build the Doing target
+    cmake .. 
+    cmake --build . --target Doing
+
+    cd ..
+else
+    echo "CMake not found, compiling with GCC..."
+
+    # Compile directly with GCC
+    gcc -o Doing src/main.c src/crud_functions.c -lsqlite3
+fi
+
+echo "Compilation completed!"
 
 # Name of the shell configuration file
 CONFIG_FILE=""
@@ -34,4 +59,5 @@ fi
 
 # Instruct the user to reload the shell
 echo "To apply the changes, run: source $CONFIG_FILE or restart the terminal."
+
 
