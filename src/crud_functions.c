@@ -1,14 +1,16 @@
-#include <stdio.h>
+//
+// Created by boreges on 14/11/24.
+//
+
+#include "crud_functions.h"
+
 #include <sqlite3.h>
+#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <time.h>
 
 
-sqlite3 *db;
-int rc;
-
-void create_task_table()
+void create_task_table(sqlite3 *db, int rc)
 {
   const char *task_table = "CREATE TABLE IF NOT EXISTS tasks ("
                            "id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -22,10 +24,10 @@ void create_task_table()
   if (rc != SQLITE_OK)
   {
         fprintf(stderr, "SQL error: %s\n", sqlite3_errmsg(db));
-  } 
+  }
 }
 
-void insert_task(const char *task_name, const char *priority, const char *create_date)
+void insert_task(sqlite3 *db, int rc, const char *task_name, const char *priority, const char *create_date)
 {
 
     char sql_create_task[100];
@@ -38,11 +40,11 @@ void insert_task(const char *task_name, const char *priority, const char *create
   if (rc != SQLITE_OK)
   {
         fprintf(stderr, "SQL error: %s\n", sqlite3_errmsg(db));
-  } 
+  }
 }
 
 
-void visualize_tasks()
+void visualize_tasks(sqlite3 *db, int rc)
 {
     sqlite3_stmt *stmt;
   const char *sql_visualize_tasks = "SELECT * FROM tasks";
@@ -64,7 +66,7 @@ void visualize_tasks()
 }
 
 
-void fetch_task_name(char *task_name, char *new_task_name)
+void fetch_task_name(sqlite3 *db, int rc, char *task_name, char *new_task_name)
 {
   char sql_fetch_task[100];
   sprintf(sql_fetch_task, "UPDATE tasks SET task_name = '%s' WHERE task_name == '%s';", new_task_name, task_name);
@@ -75,10 +77,10 @@ void fetch_task_name(char *task_name, char *new_task_name)
   if (rc != SQLITE_OK)
   {
         fprintf(stderr, "SQL error: %s\n", sqlite3_errmsg(db));
-  } 
+  }
 }
 
-void fetch_task_priority(const char *task_name, const char *new_task_priority)
+void fetch_task_priority(sqlite3 *db, int rc, const char *task_name, const char *new_task_priority)
 {
     char sql_fetch_task[100];
 
@@ -93,7 +95,7 @@ void fetch_task_priority(const char *task_name, const char *new_task_priority)
   }
 }
 
-void delete_task(const char *task_name)
+void delete_task(sqlite3 *db, int rc, const char *task_name)
 {
     char sql_delete_task[100];
     sprintf(sql_delete_task, "DELETE FROM tasks WHERE task_name = '%s';", task_name);
@@ -105,15 +107,6 @@ void delete_task(const char *task_name)
     }
 }
 
-void print_menu() {
-    printf("1. Create Task\n");
-    printf("2. View Tasks\n");
-    printf("3. Update Task Name\n");
-    printf("4. Update Task Priority\n");
-    printf("5. Delete Task\n");
-    printf("6. Exit\n");
-    printf("Enter your choice: ");
-}
 
 void get_current_date(char *date_str, size_t max_size) {
     time_t t = time(NULL);
@@ -134,59 +127,10 @@ void print_help() {
     printf("Usage: task_manager [OPTION] [ARGS...]\n");
     printf("Options:\n");
     printf("  -h                Show this help message\n");
-    printf("  -i <task> <prio>     Add a new task with name <task> and priority <prio>\n");
+    printf("  -i <task> <prio>  Add a new task with name <task> and priority <prio>\n");
     printf("  -v                View all tasks\n");
     printf("  -u <old> <new>    Update task name from <old> to <new>\n");
     printf("  -p <task> <prio>  Update task priority for <task> to <prio>\n");
     printf("  -d <task>         Delete task with name <task>\n");
 
-}
-
-int main(int argc, char *argv[]) {
-    rc = sqlite3_open("tasks.db", &db);
-
-    if (rc) {
-        fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
-        return rc;
-    }
-
-    char date_str[100];
-    get_current_date(date_str, sizeof(date_str));
-
-    create_task_table();
-
-
-    char task_name[100], new_task_name[100], priority[100], create_date[100];
-    char input[10];
-
-    if (argc == 1 || strcmp(argv[1], "-h") == 0) {
-        printf("Welcome to Task Manager\n");
-        print_help();
-    }
-
-    else if (argc == 4 && strcmp(argv[1], "-i") == 0) {
-        // task name and priority
-        insert_task(argv[2], argv[3], date_str);
-    }
-
-    else if (argv[1] != NULL && strcmp(argv[1], "-v") == 0) {
-        visualize_tasks();
-    }
-
-    else if (argv[1] != NULL && strcmp(argv[1], "-u") == 0) {
-        fetch_task_name(argv[2], argv[3]);
-    }
-
-    else if (argv[1] != NULL && strcmp(argv[1], "-p") == 0) {
-        fetch_task_priority(argv[2], argv[3]);
-    }
-
-    else if (argv[1] != NULL && strcmp(argv[1], "-d") == 0) {
-        delete_task(argv[2]);
-    }
-
-    else {
-        printf("Invalid arguments\n");
-        print_help();
-    }
 }
