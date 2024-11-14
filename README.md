@@ -22,23 +22,13 @@ This project is a simple command-line task manager application written in C. It 
 1. Clone the repository:
     ```sh
     git clone https://github.com/devgabrielsborges/task-manager.git
-    cd task-manager
+    cd Doing
     ```
 
-2. Build the project:
+2. Install:
     ```sh
-   // Cmake
-    
-   mkdir build
-    cd build
-    cmake ..
-    make
-    ```
-   OR
-    ```sh
-    // GCC
-   
-    gcc -o Doing src/main.c src/task.c -lsqlite3
+    chmod +x install.sh
+   ./install.sh
     ```
 
 ## Usage
