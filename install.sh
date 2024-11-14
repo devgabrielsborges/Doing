@@ -4,7 +4,8 @@
 BUILD_DIR="cmake-build-debug"
 
 # Full path to the binary
-BIN_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$BUILD_DIR"
+BIN_PATH_CMAKE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/$BUILD_DIR"
+BIN_PATH_GCC="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Check if cmake is installed
 if command -v cmake &> /dev/null; then
@@ -39,7 +40,7 @@ elif [ -n "$BASH_VERSION" ]; then
 elif [ -n "$FISH_VERSION" ]; then
     CONFIG_FILE="$HOME/.config/fish/config.fish"
 else
-    echo "Unsupported shell. Please add $BIN_PATH manually to the PATH."
+    echo "Unsupported shell. Please add $BIN_PATH_CMAKE and $BIN_PATH_GCC manually to the PATH."
     exit 1
 fi
 
@@ -47,14 +48,16 @@ fi
 if ! grep -q "$BIN_PATH" "$CONFIG_FILE"; then
     if [ "$CONFIG_FILE" = "$HOME/.config/fish/config.fish" ]; then
         # Configuration for Fish
-        echo "set -Ux PATH \$PATH $BIN_PATH" >> "$CONFIG_FILE"
+        echo "set -Ux PATH \$PATH $BIN_PATH_CMAKE" >> "$CONFIG_FILE"
+        echo "set -Ux PATH \$PATH $BIN_PATH_GCC" >> "$CONFIG_FILE"
     else
         # Configuration for Bash and Zsh
-        echo "export PATH=\$PATH:$BIN_PATH" >> "$CONFIG_FILE"
+        echo "export PATH=\$PATH:$BIN_PATH_CMAKE" >> "$CONFIG_FILE"
+        echo "export PATH=\$PATH:$BIN_PATH_GCC" >> "$CONFIG_FILE"
     fi
-    echo "Path $BIN_PATH added to $CONFIG_FILE."
+    echo "Path $BIN_PATH_CMAKE and $BIN_PATH_GCC added to $CONFIG_FILE."
 else
-    echo "Path $BIN_PATH is already present in $CONFIG_FILE."
+    echo "Path $BIN_PATH_CMAKE and $BIN_PATH_GCC are already present in $CONFIG_FILE."
 fi
 
 # Instruct the user to reload the shell
