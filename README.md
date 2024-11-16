@@ -14,8 +14,8 @@ This project is a simple command-line task manager application written in C. It 
 ## Requirements
 
 - C compiler (e.g., `gcc`)
-- CMake (version 3.29 or higher) (optional)
-- SQLite3 library
+- [CMake](https://cmake.org/download/) (version 3.29 or higher) (optional)
+- [SQLite3](https://www.sqlite.org/download.html)
 
 ## Installation
 
@@ -52,27 +52,27 @@ Run the `Doing` executable with the appropriate options:
 
 - Add a new task:
     ```sh
-    ./Doing -i "Buy groceries" "High"
+    Doing -i "Buy groceries" "High"
     ```
 
 - View all tasks:
     ```sh
-    ./Doing -v
+    Doing -v
     ```
 
 - Update task name:
     ```sh
-    ./Doing -u "Buy groceries" "Buy food"
+    Doing -u "Buy groceries" "Buy food"
     ```
 
 - Update task priority:
     ```sh
-    ./Doing -p "Buy food" "Medium"
+    Doing -p "Buy food" "Medium"
     ```
 
 - Delete a task:
     ```sh
-    ./Doing -d "Buy food"
+    Doing -d "Buy food"
     ```
 
 ## License

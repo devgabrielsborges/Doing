@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "crud_functions.h"
 
@@ -7,7 +8,10 @@ sqlite3 *db;
 int rc;
 
 int main(int argc, char *argv[]) {
-    rc = sqlite3_open(".tasks.db", &db);
+    char db_path[256];
+    snprintf(db_path, sizeof(db_path), "%s/.tasks.db", getenv("HOME"));
+
+    rc = sqlite3_open(db_path, &db);
 
     if (rc) {
         fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));

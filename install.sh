@@ -17,14 +17,14 @@ if command -v cmake &> /dev/null; then
 
     # Run CMake to generate the project files and build the Doing target
     cmake .. 
-    cmake --build . --target ~/.Doing
+    cmake --build . --target Doing
 
     cd ..
 else
     echo "CMake not found, compiling with GCC..."
 
     # Compile directly with GCC
-    gcc -o ~/.Doing src/main.c src/crud_functions.c -lsqlite3
+    gcc -o Doing src/main.c src/crud_functions.c -lsqlite3
 fi
 
 echo "Compilation completed!"
