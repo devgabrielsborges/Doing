@@ -50,10 +50,12 @@ if ! grep -q "$BIN_PATH" "$CONFIG_FILE"; then
         # Configuration for Fish
         echo "set -Ux PATH \$PATH $BIN_PATH_CMAKE" >> "$CONFIG_FILE"
         echo "set -Ux PATH \$PATH $BIN_PATH_GCC" >> "$CONFIG_FILE"
+        echo "alias doing=Doing" >> "$CONFIG_FILE"
     else
         # Configuration for Bash and Zsh
         echo "export PATH=\$PATH:$BIN_PATH_CMAKE" >> "$CONFIG_FILE"
         echo "export PATH=\$PATH:$BIN_PATH_GCC" >> "$CONFIG_FILE"
+        echo "alias doing=Doing" >> "$CONFIG_FILE"
     fi
     echo "Path $BIN_PATH_CMAKE and $BIN_PATH_GCC added to $CONFIG_FILE."
 else
